@@ -1,15 +1,15 @@
-import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Router } from 'express';
+import { PrismaClient } from '@prisma/client';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.get("/items", async (req, res) => {
+router.get('/items', async (req, res) => {
   const items = await prisma.item.findMany();
   res.json(items);
 });
 
-router.post("/items", async (req, res) => {
+router.post('/items', async (req, res) => {
   const { name, quantity } = req.body;
   const newItem = await prisma.item.create({
     data: {
@@ -20,7 +20,7 @@ router.post("/items", async (req, res) => {
   res.json(newItem);
 });
 
-router.put("/items/:id", async (req, res) => {
+router.put('/items/:id', async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
   const updatedItem = await prisma.item.update({
@@ -30,11 +30,9 @@ router.put("/items/:id", async (req, res) => {
   res.json(updatedItem);
 });
 
-router.delete("/items/:id", async (req, res) => {
+router.delete('/items/:id', async (req, res) => {
   const { id } = req.params;
-  await prisma.item.delete({
-    where: { id },
-  });
+  await prisma.item.delete({ where: { id } });
   res.sendStatus(204);
 });
 
