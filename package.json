@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts",
-    "heroku-postbuild": "npm install --only=dev && npm run build"
+    "dev": "nodemon src/index.ts"
   },
   "keywords": [],
   "author": "",
