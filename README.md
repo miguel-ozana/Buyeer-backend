@@ -2,32 +2,27 @@
   <img src="./.github/app.gif" alt="Buyeer Backend" />
 
   &#xa0;
-
-  <!-- <a href="https://buyeerbackend.netlify.app">Demo</a> -->
 </div>
 
 <h1 align="center">Buyeer Backend</h1>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/{{YOUR_GITHUB_USERNAME}}/buyeer-backend?color=56BEB8">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/{{miguel-ozana}}/buyeer-backend?color=56BEB8">
 
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/{{YOUR_GITHUB_USERNAME}}/buyeer-backend?color=56BEB8">
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/{{miguel-ozana}}/buyeer-backend?color=56BEB8">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/{{YOUR_GITHUB_USERNAME}}/buyeer-backend?color=56BEB8">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/{{miguel-ozana}}/buyeer-backend?color=56BEB8">
 
-  <img alt="License" src="https://img.shields.io/github/license/{{YOUR_GITHUB_USERNAME}}/buyeer-backend?color=56BEB8">
+   <img alt="Github issues" src="https://img.shields.io/github/issues/{{miguel-ozana}}/buyeer-backend?color=56BEB8" />
 
-  <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/{{YOUR_GITHUB_USERNAME}}/buyeer-backend?color=56BEB8" /> -->
+   <img alt="Github forks" src="https://img.shields.io/github/forks/{{miguel-ozana}}/buyeer-backend?color=56BEB8" /> 
 
-  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/{{YOUR_GITHUB_USERNAME}}/buyeer-backend?color=56BEB8" /> -->
-
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/{{YOUR_GITHUB_USERNAME}}/buyeer-backend?color=56BEB8" /> -->
+   <img alt="Github stars" src="https://img.shields.io/github/stars/{{miguel-ozana}}/buyeer-backend?color=56BEB8" />
 </p>
 
 <!-- Status -->
 
 <!-- <h4 align="center"> 
-	🚧  Buyeer Backend 🚀 Under construction...  🚧
 </h4> 
 
 <hr> -->
@@ -39,30 +34,31 @@
   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Author</a>
+  <a href="https://github.com/{{miguel-ozana}}" target="_blank">Author</a>
 </p>
 
 <br>
 
 ## :dart: About ##
 
-Describe your project
+The Inventory Management API is a backend service designed to handle the management of inventory items. It is built using Node.js and Express, and it leverages the Prisma ORM for database interactions with MongoDB.
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+:heavy_check_mark: Item management: Provides endpoints to create, read, update, and delete inventory items.;\
+:heavy_check_mark: RESTful API: Follows RESTful principles for resource management.;\
+:heavy_check_mark: Database Integration: Uses MongoDB as the database, managed via Prisma ORM for seamless database operations.;\
+:heavy_check_mark: Environment Configuration: Configured using environment variables for sensitive data and easy deployment.;\
 
 ## :rocket: Technologies ##
 
 The following tools were used in this project:
 
-- [Expo](https://expo.io/)
 - [Node.js](https://nodejs.org/en/)
-- [React](https://pt-br.reactjs.org/)
-- [React Native](https://reactnative.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Express](https://expressjs.com/pt-br/)
+- [PrismaORM](https://www.prisma.io/data-platform/accelerate)
+- [MongoDB](https://www.mongodb.com/)
 
 ## :white_check_mark: Requirements ##
 
@@ -72,16 +68,16 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 
 ```bash
 # Clone this project
-$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/buyeer-backend
+$ git clone https://github.com/{{miguel-ozana}}/buyeer-backend
 
 # Access
 $ cd buyeer-backend
 
 # Install dependencies
-$ yarn
+$ npm install
 
 # Run the project
-$ yarn start
+$ npm run start
 
 # The server will initialize in the <http://localhost:3000>
 ```
@@ -91,7 +87,7 @@ $ yarn start
 This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
 
 
-Made with :heart: by <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">{{Miguel Ozana}}</a>
+Made with :heart: by <a href="https://github.com/{{miguel-ozana}}" target="_blank">{{https://github.com/miguel-ozana}}</a>
 
 &#xa0;
 
