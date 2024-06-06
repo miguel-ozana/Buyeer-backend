@@ -87,7 +87,7 @@ $ npm run start
 This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
 
 
-Made with :heart: by <a href="https://github.com/miguel-ozana" target="_blank">{{https://github.com/miguel-ozana}}</a>
+Made with :heart: by <a href="https://github.com/miguel-ozana" target="_blank">Miguel Ozana</a>
 
 &#xa0;
 
