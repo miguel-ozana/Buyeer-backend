@@ -24,7 +24,7 @@ router.put('/items/:id', async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
   const updatedItem = await prisma.item.update({
-    where: { id },
+    where: { id: id },
     data: { name, quantity },
   });
   res.json(updatedItem);
@@ -32,8 +32,9 @@ router.put('/items/:id', async (req, res) => {
 
 router.delete('/items/:id', async (req, res) => {
   const { id } = req.params;
-  await prisma.item.delete({ where: { id } });
+  await prisma.item.delete({ where: { id: id } });
   res.sendStatus(204);
 });
+
 
 export default router;
