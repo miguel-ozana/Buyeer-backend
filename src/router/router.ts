@@ -18,8 +18,9 @@ router.get('/items', async (req: Request, res: Response) => {
     }
 
     const items = await prisma.item.findMany({
-      where: { userId: userId }
+      where: { userId }
     });
+
     res.json(items);
   } catch (error) {
     console.error('Erro ao buscar os itens:', error);
@@ -38,7 +39,7 @@ router.get('/items/:itemId', async (req: Request, res: Response) => {
     }
 
     const item = await prisma.item.findFirst({
-      where: { id: itemId, userId: userId }
+      where: { id: itemId, userId }
     });
 
     if (item) {
@@ -66,7 +67,7 @@ router.post('/items', async (req: Request, res: Response) => {
       data: {
         name,
         quantity,
-        userId: userId
+        user: { connect: { id: userId } }
       }
     });
 
@@ -88,10 +89,14 @@ router.put('/items/:id', async (req: Request, res: Response) => {
       return res.status(401).send('User not authenticated');
     }
 
-    const updatedItem = await prisma.item.update({
-      where: { id: id, userId: userId },
-      data: { name, quantity }
+    const updatedItem = await prisma.item.updateMany({
+      where: { id, userId },
+      data: { name, quantity },
     });
+
+    if (updatedItem.count === 0) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
 
     res.json(updatedItem);
   } catch (error) {
@@ -110,9 +115,13 @@ router.delete('/items/:id', async (req: Request, res: Response) => {
       return res.status(401).send('User not authenticated');
     }
 
-    await prisma.item.delete({
-      where: { id: id, userId: userId }
+    const deletedItem = await prisma.item.deleteMany({
+      where: { id, userId }
     });
+
+    if (deletedItem.count === 0) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
 
     res.sendStatus(204);
   } catch (error) {
@@ -121,4 +130,6 @@ router.delete('/items/:id', async (req: Request, res: Response) => {
   }
 });
 
+// Exporta o router com todas as rotas
 export default router;
+
