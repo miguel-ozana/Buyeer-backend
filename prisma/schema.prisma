@@ -7,10 +7,21 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
+  password String
+  items    Item[] @relation("UserItems")
+}
+
 model Item {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   quantity  Int
+  // Defina userId como um campo escalável
+  userId    String   @db.ObjectId
+  // Mantenha a relação com o modelo User
+  user      User     @relation("UserItems", fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
