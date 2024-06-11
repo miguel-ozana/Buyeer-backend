@@ -14,7 +14,7 @@ router.get('/items', async (req, res) => {
   }
 });
 
-router.get('/api/items/:itemId', async (req, res) => {
+router.get('/items/:itemId', async (req, res) => {
   const { itemId } = req.params;
   console.log(`Buscando detalhes do item com ID: ${itemId}`);
 
