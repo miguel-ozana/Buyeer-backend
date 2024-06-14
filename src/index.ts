@@ -10,7 +10,7 @@ const app = express();
 const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
 
-const corsOptions = {
+const corsOptions = { 
   origin: 'http://localhost:3000',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
