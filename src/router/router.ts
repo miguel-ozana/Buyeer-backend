@@ -36,7 +36,6 @@ router.get('/items/:itemId', async (req, res) => {
   }
 });
 
-
 router.post('/items', async (req, res) => {
   const { name, quantity } = req.body;
   try {
@@ -44,6 +43,7 @@ router.post('/items', async (req, res) => {
       data: {
         name,
         quantity,
+        bought: false // Definindo bought como falso por padrão
       },
     });
     res.status(201).json(newItem);
@@ -55,11 +55,11 @@ router.post('/items', async (req, res) => {
 
 router.put('/items/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, quantity } = req.body;
+  const { name, quantity, bought } = req.body; 
   try {
     const updatedItem = await prisma.item.update({
-      where: { id: id.toString() }, // Convertendo para string
-      data: { name, quantity },
+      where: { id: id.toString() },
+      data: { name, quantity, bought }, // Atualizando bought também
     });
     res.json(updatedItem);
   } catch (error) {
@@ -71,13 +71,12 @@ router.put('/items/:id', async (req, res) => {
 router.delete('/items/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await prisma.item.delete({ where: { id: id.toString() } }); // Convertendo para string
+    await prisma.item.delete({ where: { id: id.toString() } });
     res.sendStatus(204);
   } catch (error) {
     console.error('Erro ao deletar o item:', error);
     res.status(500).json({ error: 'Erro ao deletar o item' });
   }
 });
-
 
 export default router;

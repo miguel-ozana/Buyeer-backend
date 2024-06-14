@@ -11,6 +11,7 @@ model Item {
   id        String   @id @default(uuid()) @map("_id")
   name      String
   quantity  Int
+  bought    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
