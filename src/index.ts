@@ -20,6 +20,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/api', routes);
+app.use('/auth', authRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening on ${port}`);

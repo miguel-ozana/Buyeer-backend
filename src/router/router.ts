@@ -1,26 +1,12 @@
-/// <reference path="../../types/types.d.ts" />
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import authenticate from '../middleware/autheticate'
 
 const router = Router();
 const prisma = new PrismaClient();
 
-// Middleware de autenticação
-router.use(authenticate);
-
-// Rota para buscar todos os itens do usuário autenticado
-router.get('/items', async (req: Request, res: Response) => {
+router.get('/items', async (req, res) => {
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).send('User not authenticated');
-    }
-
-    const items = await prisma.item.findMany({
-      where: { userId }
-    });
-
+    const items = await prisma.item.findMany();
     res.json(items);
   } catch (error) {
     console.error('Erro ao buscar os itens:', error);
@@ -28,49 +14,38 @@ router.get('/items', async (req: Request, res: Response) => {
   }
 });
 
-// Rota para buscar detalhes de um item específico do usuário autenticado
-router.get('/items/:itemId', async (req: Request, res: Response) => {
+router.get('/items/:itemId', async (req, res) => {
   const { itemId } = req.params;
+  console.log(`Buscando detalhes do item com ID: ${itemId}`);
 
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).send('User not authenticated');
-    }
-
-    const item = await prisma.item.findFirst({
-      where: { id: itemId, userId }
+    const item = await prisma.item.findUnique({
+      where: { id: itemId }
     });
 
     if (item) {
+      console.log(`Item encontrado: ${JSON.stringify(item)}`);
       res.json(item);
     } else {
-      res.status(404).send('Item not found');
+      console.log('Item não encontrado');
+      res.status(404).send('Item não encontrado');
     }
-  } catch (error) {
-    console.error('Erro ao buscar detalhes do item:', error);
-    res.status(500).json({ error: 'Erro ao buscar detalhes do item' });
+  } catch (err) {
+    console.error('Erro ao buscar detalhes do item:', err);
+    res.status(500).send('Erro ao buscar detalhes do item');
   }
 });
 
-// Rota para criar um novo item para o usuário autenticado
-router.post('/items', async (req: Request, res: Response) => {
+
+router.post('/items', async (req, res) => {
   const { name, quantity } = req.body;
-
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).send('User not authenticated');
-    }
-
     const newItem = await prisma.item.create({
       data: {
         name,
         quantity,
-        user: { connect: { id: userId } }
-      }
+      },
     });
-
     res.status(201).json(newItem);
   } catch (error) {
     console.error('Erro ao criar um novo item:', error);
@@ -78,26 +53,14 @@ router.post('/items', async (req: Request, res: Response) => {
   }
 });
 
-// Rota para atualizar um item específico do usuário autenticado
-router.put('/items/:id', async (req: Request, res: Response) => {
+router.put('/items/:id', async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
-
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).send('User not authenticated');
-    }
-
-    const updatedItem = await prisma.item.updateMany({
-      where: { id, userId },
+    const updatedItem = await prisma.item.update({
+      where: { id: id.toString() }, // Convertendo para string
       data: { name, quantity },
     });
-
-    if (updatedItem.count === 0) {
-      return res.status(404).json({ error: 'Item not found' });
-    }
-
     res.json(updatedItem);
   } catch (error) {
     console.error('Erro ao atualizar o item:', error);
@@ -105,24 +68,10 @@ router.put('/items/:id', async (req: Request, res: Response) => {
   }
 });
 
-// Rota para deletar um item específico do usuário autenticado
-router.delete('/items/:id', async (req: Request, res: Response) => {
+router.delete('/items/:id', async (req, res) => {
   const { id } = req.params;
-
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).send('User not authenticated');
-    }
-
-    const deletedItem = await prisma.item.deleteMany({
-      where: { id, userId }
-    });
-
-    if (deletedItem.count === 0) {
-      return res.status(404).json({ error: 'Item not found' });
-    }
-
+    await prisma.item.delete({ where: { id: id.toString() } }); // Convertendo para string
     res.sendStatus(204);
   } catch (error) {
     console.error('Erro ao deletar o item:', error);
@@ -130,6 +79,5 @@ router.delete('/items/:id', async (req: Request, res: Response) => {
   }
 });
 
-// Exporta o router com todas as rotas
-export default router;
 
+export default router;
