@@ -36,6 +36,7 @@ router.get('/items/:itemId', async (req, res) => {
   }
 });
 
+
 router.post('/items', async (req, res) => {
   const { name, quantity } = req.body;
   try {
@@ -77,5 +78,6 @@ router.delete('/items/:id', async (req, res) => {
     res.status(500).json({ error: 'Erro ao deletar o item' });
   }
 });
+
 
 export default router;
