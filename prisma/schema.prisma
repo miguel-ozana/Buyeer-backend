@@ -8,7 +8,7 @@ generator client {
 }
 
 model Item {
-  id        String   @id @default(uuid()) @map("_id")
+  id        Int      @id @default(autoincrement())
   name      String
   quantity  Int
   bought    Boolean  @default(false)

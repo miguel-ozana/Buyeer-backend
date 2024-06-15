@@ -1,26 +1,25 @@
 import { Router, Request, Response } from 'express';
-import { prismaMiddleware } from '../middleware/prismaMiddleware';
+import { PrismaClient } from '@prisma/client';
 
 const router = Router();
+const prisma = new PrismaClient();
 
-router.use(prismaMiddleware);
-
-router.get('/items', async (req: Request, res: Response) => {
+router.get('/items', async (req, res) => {
   try {
-    const items = await req.prisma.item.findMany();
+    const items = await prisma.item.findMany();
     res.json(items);
   } catch (error) {
-    console.error('Erro ao buscar os itens:', error);
-    res.status(500).json({ error: 'Erro ao buscar os itens' });
+    console.error('Erro ao buscar itens:', error);
+    res.status(500).json({ error: 'Erro ao buscar itens' });
   }
 });
 
 router.get('/items/:itemId', async (req: Request, res: Response) => {
-  const { itemId } = req.params;
+  const itemId = parseInt(req.params.itemId, 10); // Converter para número
   console.log(`Buscando detalhes do item com ID: ${itemId}`);
 
   try {
-    const item = await req.prisma.item.findUnique({
+    const item = await prisma.item.findUnique({
       where: { id: itemId }
     });
 
@@ -37,28 +36,32 @@ router.get('/items/:itemId', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/items', async (req: Request, res: Response) => {
-  const { name, quantity } = req.body;
+router.post('/items', async (req, res) => {
   try {
-    const newItem = await req.prisma.item.create({
+    const { name, quantity } = req.body;
+    if (!name || !quantity) {
+      return res.status(400).json({ error: 'Nome e quantidade são obrigatórios' });
+    }
+
+    const newItem = await prisma.item.create({
       data: {
         name,
-        quantity,
-      },
+        quantity
+      }
     });
-    res.status(201).json(newItem);
+    res.json(newItem);
   } catch (error) {
-    console.error('Erro ao criar um novo item:', error);
-    res.status(500).json({ error: 'Erro ao criar um novo item' });
+    console.error('Erro ao adicionar item:', error);
+    res.status(500).json({ error: 'Erro ao adicionar item' });
   }
 });
 
 router.put('/items/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id, 10); // Converter para número
   const { name, quantity } = req.body;
   try {
-    const updatedItem = await req.prisma.item.update({
-      where: { id: id.toString() }, // Convertendo para string
+    const updatedItem = await prisma.item.update({
+      where: { id },
       data: { name, quantity },
     });
     res.json(updatedItem);
@@ -69,9 +72,9 @@ router.put('/items/:id', async (req: Request, res: Response) => {
 });
 
 router.delete('/items/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id, 10); // Converter para número
   try {
-    await req.prisma.item.delete({ where: { id: id.toString() } }); // Convertendo para string
+    await prisma.item.delete({ where: { id } });
     res.sendStatus(204);
   } catch (error) {
     console.error('Erro ao deletar o item:', error);
