@@ -21,9 +21,9 @@ const corsOptions = {
     'Origin',
     'Accept',
     'X-Access-Token',
-    'x-device-id', // Adicione x-device-id aos cabeçalhos permitidos
+    'x-device-id',
   ],
-  exposedHeaders: ['x-device-id'], // Exponha x-device-id para que o navegador possa acessá-lo
+  exposedHeaders: ['x-device-id'],
 };
 
 app.use(cors(corsOptions));
