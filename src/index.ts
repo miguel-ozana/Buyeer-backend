@@ -1,8 +1,8 @@
-// server.ts
+// src/server.ts
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import router from './router/router'
+import itemRoutes from './router/router';
 import { deviceDbMiddleware } from './middleware/deviceDbMiddleware';
 
 dotenv.config();
@@ -19,8 +19,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(deviceDbMiddleware);
-app.use('/api', router);
+app.use(deviceDbMiddleware); // Use the middleware here
+app.use('/api', itemRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening on ${port}`);
