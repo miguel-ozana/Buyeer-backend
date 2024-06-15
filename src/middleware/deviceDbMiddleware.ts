@@ -1,3 +1,4 @@
+// src/middleware/deviceDbMiddleware.ts
 import { PrismaClient } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import path from 'path';
