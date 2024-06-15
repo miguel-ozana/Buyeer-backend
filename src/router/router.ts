@@ -1,12 +1,10 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
 
 const router = Router();
-const prisma = new PrismaClient();
 
-router.get('/items', async (req, res) => {
+router.get('/items', async (req: Request, res: Response) => {
   try {
-    const items = await prisma.item.findMany();
+    const items = await req.prisma.item.findMany();
     res.json(items);
   } catch (error) {
     console.error('Erro ao buscar itens:', error);
@@ -15,12 +13,12 @@ router.get('/items', async (req, res) => {
 });
 
 router.get('/items/:itemId', async (req: Request, res: Response) => {
-  const itemId = parseInt(req.params.itemId, 10); // Converter para número
+  const { itemId } = req.params;
   console.log(`Buscando detalhes do item com ID: ${itemId}`);
 
   try {
-    const item = await prisma.item.findUnique({
-      where: { id: itemId }
+    const item = await req.prisma.item.findUnique({
+      where: { id: parseInt(itemId, 10) },
     });
 
     if (item) {
@@ -36,18 +34,18 @@ router.get('/items/:itemId', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/items', async (req, res) => {
+router.post('/items', async (req: Request, res: Response) => {
   try {
     const { name, quantity } = req.body;
     if (!name || !quantity) {
       return res.status(400).json({ error: 'Nome e quantidade são obrigatórios' });
     }
 
-    const newItem = await prisma.item.create({
+    const newItem = await req.prisma.item.create({
       data: {
         name,
-        quantity
-      }
+        quantity: parseInt(quantity, 10),
+      },
     });
     res.json(newItem);
   } catch (error) {
@@ -57,12 +55,12 @@ router.post('/items', async (req, res) => {
 });
 
 router.put('/items/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id, 10); // Converter para número
+  const { id } = req.params;
   const { name, quantity } = req.body;
   try {
-    const updatedItem = await prisma.item.update({
-      where: { id },
-      data: { name, quantity },
+    const updatedItem = await req.prisma.item.update({
+      where: { id: parseInt(id, 10) },
+      data: { name, quantity: parseInt(quantity, 10) },
     });
     res.json(updatedItem);
   } catch (error) {
@@ -72,9 +70,9 @@ router.put('/items/:id', async (req: Request, res: Response) => {
 });
 
 router.delete('/items/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id, 10); // Converter para número
+  const { id } = req.params;
   try {
-    await prisma.item.delete({ where: { id } });
+    await req.prisma.item.delete({ where: { id: parseInt(id, 10) } });
     res.sendStatus(204);
   } catch (error) {
     console.error('Erro ao deletar o item:', error);
