@@ -1,12 +1,13 @@
-import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { Router, Request, Response } from 'express';
+import { prismaMiddleware } from '../middleware/prismaMiddleware';
 
 const router = Router();
-const prisma = new PrismaClient();
 
-router.get('/items', async (req, res) => {
+router.use(prismaMiddleware);
+
+router.get('/items', async (req: Request, res: Response) => {
   try {
-    const items = await prisma.item.findMany();
+    const items = await req.prisma.item.findMany();
     res.json(items);
   } catch (error) {
     console.error('Erro ao buscar os itens:', error);
@@ -14,12 +15,12 @@ router.get('/items', async (req, res) => {
   }
 });
 
-router.get('/items/:itemId', async (req, res) => {
+router.get('/items/:itemId', async (req: Request, res: Response) => {
   const { itemId } = req.params;
   console.log(`Buscando detalhes do item com ID: ${itemId}`);
 
   try {
-    const item = await prisma.item.findUnique({
+    const item = await req.prisma.item.findUnique({
       where: { id: itemId }
     });
 
@@ -36,14 +37,13 @@ router.get('/items/:itemId', async (req, res) => {
   }
 });
 
-router.post('/items', async (req, res) => {
+router.post('/items', async (req: Request, res: Response) => {
   const { name, quantity } = req.body;
   try {
-    const newItem = await prisma.item.create({
+    const newItem = await req.prisma.item.create({
       data: {
         name,
         quantity,
-        bought: false // Definindo bought como falso por padrão
       },
     });
     res.status(201).json(newItem);
@@ -53,13 +53,13 @@ router.post('/items', async (req, res) => {
   }
 });
 
-router.put('/items/:id', async (req, res) => {
+router.put('/items/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, quantity, bought } = req.body; 
+  const { name, quantity } = req.body;
   try {
-    const updatedItem = await prisma.item.update({
-      where: { id: id.toString() },
-      data: { name, quantity, bought }, // Atualizando bought também
+    const updatedItem = await req.prisma.item.update({
+      where: { id: id.toString() }, // Convertendo para string
+      data: { name, quantity },
     });
     res.json(updatedItem);
   } catch (error) {
@@ -68,10 +68,10 @@ router.put('/items/:id', async (req, res) => {
   }
 });
 
-router.delete('/items/:id', async (req, res) => {
+router.delete('/items/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await prisma.item.delete({ where: { id: id.toString() } });
+    await req.prisma.item.delete({ where: { id: id.toString() } }); // Convertendo para string
     res.sendStatus(204);
   } catch (error) {
     console.error('Erro ao deletar o item:', error);
