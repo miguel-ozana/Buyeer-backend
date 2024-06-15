@@ -1,4 +1,5 @@
 // src/router/router.ts
+/// <reference path="../../types/types.d.ts" />
 import { PrismaClient } from '@prisma/client';
 import { Router, Request, Response } from 'express';
 
