@@ -1,4 +1,5 @@
 // src/server.ts
+/// <reference path="../types/types.d.ts" />
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';

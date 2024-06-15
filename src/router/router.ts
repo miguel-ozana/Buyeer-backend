@@ -1,10 +1,8 @@
 // src/router/router.ts
 /// <reference path="../../types/types.d.ts" />
-import { PrismaClient } from '@prisma/client';
 import { Router, Request, Response } from 'express';
 
 const router = Router();
-const prisma = PrismaClient
 
 router.get('/items', async (req: Request, res: Response) => {
   try {
