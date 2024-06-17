@@ -41,13 +41,13 @@
 
 ## :dart: About ##
 
-The Inventory Management API is a backend service designed to handle the management of inventory items. It is built using Node.js and Express, and it leverages the Prisma ORM for database interactions with MongoDB.
+The Inventory Management API is a backend service designed to handle the management of inventory items. It is built using Node.js and Express, and it leverages the Prisma ORM for database interactions with postgreSQL.
 
 ## :sparkles: Features ##
 
 :heavy_check_mark: Item management: Provides endpoints to create, read, update, and delete inventory items.;\
 :heavy_check_mark: RESTful API: Follows RESTful principles for resource management.;\
-:heavy_check_mark: Database Integration: Uses MongoDB as the database, managed via Prisma ORM for seamless database operations.;\
+:heavy_check_mark: Database Integration: Uses postgreSQL as the database, managed via Prisma ORM for seamless database operations.;\
 :heavy_check_mark: Environment Configuration: Configured using environment variables for sensitive data and easy deployment.;\
 
 ## :rocket: Technologies ##
@@ -58,7 +58,7 @@ The following tools were used in this project:
 - [TypeScript](https://www.typescriptlang.org/)
 - [Express](https://expressjs.com/pt-br/)
 - [PrismaORM](https://www.prisma.io/data-platform/accelerate)
-- [MongoDB](https://www.mongodb.com/)
+- [postgreSQL](https://www.postgresql.org/)
 
 ## :white_check_mark: Requirements ##
 
