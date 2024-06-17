@@ -2,12 +2,12 @@ import { Router } from "express";
 import { z } from "zod";
 export const cartRoute = Router();
 
-import { prisma } from "../lib/prisma.lib"
-import { authenticateUser } from "../middleware/authenticate"
+import { prisma } from "../lib/prisma.lib";
+import { authenticateUser } from "../middleware/authenticate";
 
 cartRoute.use(authenticateUser);
 
-cartRoute.get('/', async (request, response) => {
+cartRoute.get("/", async (request, response) => {
   const { userId } = request;
 
   const searchCartSchema = z.object({
@@ -19,18 +19,16 @@ cartRoute.get('/', async (request, response) => {
   const carts = await prisma.cart.findMany({
     where: {
       title: {
-        contains: title
+        contains: title,
       },
-      userId
-    }
+      userId,
+    },
   });
 
-  return response
-    .status(200)
-    .json(carts);
+  return response.status(200).json(carts);
 });
 
-cartRoute.get('/:cartId', async (request, response) => {
+cartRoute.get("/:cartId", async (request, response) => {
   const findCartSchema = z.object({
     cartId: z.string(),
   });
@@ -41,36 +39,34 @@ cartRoute.get('/:cartId', async (request, response) => {
   const cart = await prisma.cart.findUniqueOrThrow({
     where: {
       id: cartId,
-      userId
-    }
+      userId,
+    },
   });
 
-  if(!cart){
+  if (!cart) {
     return response.status(404).json({ error: "Cart not found" });
   }
 
-  return response
-    .status(200)
-    .json(cart);
+  return response.status(200).json(cart);
 });
 
-cartRoute.get('/:cartId/products', async (request, response) => {
+cartRoute.get("/:cartId/products", async (request, response) => {
   const cartIdSchema = z.object({
-    cartId: z.string().uuid()
+    cartId: z.string().uuid(),
   });
-  
+
   const { cartId } = cartIdSchema.parse(request.params);
 
   const products = await prisma.product.findMany({
     where: {
-      cartId
-    }
+      cartId,
+    },
   });
 
   return response.status(200).send(products);
 });
 
-cartRoute.post('/', async (request, response) => {
+cartRoute.post("/", async (request, response) => {
   const { userId } = request;
 
   const cartSchema = z.object({
@@ -84,23 +80,21 @@ cartRoute.post('/', async (request, response) => {
     data: {
       title,
       limit,
-      userId: userId as string
-    }
+      userId: userId as string,
+    },
   });
 
-  return response
-    .status(201)
-    .send();
+  return response.status(201).send();
 });
 
-cartRoute.patch('/:cartId', async (request, response) => {
+cartRoute.patch("/:cartId", async (request, response) => {
   const findCartSchema = z.object({
     cartId: z.string(),
   });
 
   const cartSchema = z.object({
     title: z.string().optional(),
-    limit: z.number().optional()
+    limit: z.number().optional(),
   });
 
   const cart = cartSchema.parse(request.body);
@@ -108,17 +102,15 @@ cartRoute.patch('/:cartId', async (request, response) => {
 
   await prisma.cart.update({
     where: {
-      id: cartId
+      id: cartId,
     },
-    data: { ...cart }
+    data: { ...cart },
   });
 
-  return response
-    .status(204)
-    .send();
+  return response.status(204).send();
 });
 
-cartRoute.delete('/:cartId', async (req, res) => {
+cartRoute.delete("/:cartId", async (req, res) => {
   const paramsSchema = z.object({
     cartId: z.string(),
   });
@@ -129,10 +121,10 @@ cartRoute.delete('/:cartId', async (req, res) => {
     await prisma.cart.delete({
       where: {
         id: cartId,
-        userId: req.userId
-      }
+        userId: req.userId,
+      },
     });
-  
+
     return res.status(204).send();
   } catch (error) {
     return res.status(404).json({ error: "Cart not found" });

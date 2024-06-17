@@ -2,11 +2,10 @@ import { Router } from "express";
 import { z } from "zod";
 export const productRoute = Router();
 
-
 import { authenticateUser } from "../middleware/authenticate";
 import { prisma } from "../lib/prisma.lib";
 
-productRoute.use(authenticateUser)
+productRoute.use(authenticateUser);
 
 productRoute.get("/:productId", async (req, res) => {
   const paramsSchema = z.object({
@@ -16,60 +15,62 @@ productRoute.get("/:productId", async (req, res) => {
   const { productId } = paramsSchema.parse(req.params);
   const product = await prisma.product.findUnique({
     where: {
-      id: productId
-    }
+      id: productId,
+    },
   });
 
-  if(!product){
+  if (!product) {
     return res.status(404).json({ message: "Product not found" });
   }
 
-  return res.status(200).send(product)
+  return res.status(200).send(product);
 });
 
-productRoute.post('/', async (req, res) => {
+productRoute.post("/", async (req, res) => {
   const cartSchema = z.object({
     name: z.string(),
     price: z.number().min(0),
     quantity: z.number().min(1),
     description: z.string(),
-    cartId: z.string().uuid()
+    cartId: z.string().uuid(),
   });
 
-  const { name, price, quantity, description, cartId } = cartSchema.parse(req.body);
+  const { name, price, quantity, description, cartId } = cartSchema.parse(
+    req.body
+  );
 
-  await prisma.product.create({ 
+  await prisma.product.create({
     data: {
       name,
       price,
       quantity,
       cartId,
-    }
+    },
   });
 
   return res.status(201).send();
 });
 
-productRoute.delete('/:productId', async (req, res) => {
+productRoute.delete("/:productId", async (req, res) => {
   const paramsSchema = z.object({
     productId: z.string(),
   });
 
   const { productId } = paramsSchema.parse(req.params);
 
-  try{
+  try {
     const product = await prisma.product.delete({
       where: {
-        id: productId
-      }
+        id: productId,
+      },
     });
     return res.status(204).send();
-  } catch(error){
+  } catch (error) {
     return res.status(404).json({ message: "Product not found" });
   }
 });
 
-productRoute.patch('/:productId', async (request, response) => {
+productRoute.patch("/:productId", async (request, response) => {
   const findProductSchema = z.object({
     productId: z.string(),
   });
@@ -85,11 +86,10 @@ productRoute.patch('/:productId', async (request, response) => {
 
   await prisma.product.update({
     where: {
-      id: productId
+      id: productId,
     },
-    data: { ...product }
+    data: { ...product },
   });
 
   return response.status(204).send();
-}
-);
+});

@@ -61,18 +61,15 @@ userRoute.post("/login", async (req, res) => {
     if (!comparePass) {
       return res.status(400).json({ message: "Invalid password" });
     }
-    const token = sign(
-      {}, 
-      String(process.env.SECRET_KEY), {
+    const token = sign({}, String(process.env.SECRET_KEY), {
       subject: checkExistUser.id,
       expiresIn: "1d",
-    }
-  );
+    });
 
-  return res.send({
-    user: checkExistUser,
-    token
-  })
+    return res.send({
+      user: checkExistUser,
+      token,
+    });
   } catch (error) {
     res.json(error);
   }

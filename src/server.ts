@@ -7,7 +7,6 @@ import { cartRoute } from "./router/cart.route";
 import { userRoute } from "./router/user.route";
 import { productRoute } from "./router/product.route";
 
-
 app.use(cors());
 app.use(express.json());
 
