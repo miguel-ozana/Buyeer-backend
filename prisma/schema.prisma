@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -7,11 +7,33 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Item {
-  id        Int      @id @default(autoincrement())
-  name      String
-  quantity  Int
-  bought    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String
+  password String
+
+  carts Cart[]
+}
+
+model Cart {
+  id         String    @id @default(uuid())
+  title      String
+  limit      Decimal
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  products   Product[]
+
+  userId String
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Product {
+  id       String  @id @default(uuid())
+  name     String
+  price    Decimal
+  quantity Int
+
+  cartId String
+  Cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
